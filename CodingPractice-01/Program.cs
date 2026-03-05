@@ -68,9 +68,12 @@ public struct Fraction
         return $"{Numerator}/{Denominator}";
     }
 }
-*/
-//3.
 
+//3.
+Money m1 = new Money(1000, "KRW");
+Money m2 = new Money(2000, "KRW");
+Console.WriteLine(m1 == m2);
+Console.WriteLine(m1 < m2);
 
 public struct Money
 {
@@ -79,18 +82,16 @@ public struct Money
 
     public Money(decimal amount, string currency)
     {
-        Amount = amount;
-        Currency = currency;
+        Amount = amount; Currency = currency;
     }
 
     public static bool operator ==(Money a, Money b)
     {
-        return a.Currency == b.Currency && a.Amount == b.Amount;
+        return a.Amount == b.Amount && a.Currency == b.Currency;
     }
-
     public static bool operator !=(Money a, Money b)
     {
-        return !(a == b); 
+        return !(a.Amount == b.Amount && a.Currency == b.Currency);
     }
 
     public static bool operator <(Money a, Money b)
@@ -117,5 +118,61 @@ public struct Money
             return this == other;
         }
         return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Amount, Currency);
+    }
+}
+
+//4.
+Vector2 v = new Vector2(1, 2);
+v += new Vector2(3, 4);
+Console.WriteLine(v);
+
+public struct Vector2
+{
+    public float X;
+    public float Y;
+
+    public Vector2(float x, float y)
+    {
+        X = x; Y = y;
+    }
+
+    public static Vector2 operator +(Vector2 a, Vector2 b)
+    {
+        return new Vector2(a.X + b.X, a.Y + b.Y);
+    }
+
+    public override string ToString()
+    {
+        return $"({X}, {Y})";
+    }
+}
+*/
+//5.
+Celsius temp = 36.5;
+double value = temp;
+Console.WriteLine(value);
+
+public struct Celsius
+{
+    public double Degrees;
+
+    public Celsius(double degrees)
+    {
+        Degrees = degrees; 
+    }
+
+    public static implicit operator double(Celsius c)
+    {
+        return c.Degrees; 
+    }
+
+    public static implicit operator Celsius(double d)
+    {
+        return new Celsius(d); 
     }
 }
